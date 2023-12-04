@@ -24,9 +24,7 @@ En el ejemplo anterior, los juegos 1, 2 y 5 habrían sido posibles si la bolsa h
 
 Determina qué juegos habrían sido posibles si la bolsa hubiera sido cargada solo con 12 cubos rojos, 13 cubos verdes y 14 cubos azules. ¿Cuál es la suma de los ID de esos juegos?
 
-## ¡Claro, puedo ayudarte! Aquí está la traducción al español:
-
---- Parte Dos ---
+## Parte Dos ---
 ¡El elfo dice que han dejado de producir nieve porque no están recibiendo agua! No está seguro de por qué se detuvo el agua; sin embargo, puede mostrarte cómo llegar a la fuente de agua para que lo compruebes por ti mismo. ¡Está justo ahí adelante!
 
 Mientras continúas tu caminata, el elfo plantea una segunda pregunta: en cada juego que jugaste, ¿cuál es la menor cantidad de cubos de cada color que podría haber estado en la bolsa para hacer posible el juego?
