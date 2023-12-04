@@ -1,65 +1,83 @@
 import os
+import numpy as np
 
-BAG = {"red": 12, "green": 13, "blue": 14}
+
+def file_to_nparray(file_path):
+    """Convert a file to a numpy array."""
+    with open(file_path, 'r', encoding="utf-8") as file:
+        lines_list = [list(line.strip()) for line in file]
+    return np.array(lines_list)
 
 
-def process_game(line: str, verbose: bool = False) -> int:
-    """ Procesa una linea del juego. """
-    
-    # Separar la linea en sus componentes. Primero el juego de las jugadas
-    game, hands = line.split(":")
+def extract_chars(np_array):
+    """Extract all the unique chars from a numpy array."""
+    char_list = list(set(char for row in np_array for char in row if not char.isdigit() and char != "."))
+    return char_list
+
+def look_for_symbol(engine, symbols, row, inicio, fin, verbose: bool = False):
+    """Look for a symbol around a number."""
+    start_row = row - 1 if row > 0 else row
+    end_row = row + 2 if row < len(engine)-1 else row
+    start_col = inicio - 1 if inicio > 0 else inicio
+    end_col = fin + 1 if fin < len(engine[row]) else fin
     if verbose:
-        print(f'game = "{game}"')
-        print(f'hands = "{hands}"')
-
-    valid = True
-
-    # Obtener el ID del juego
-    game_id = game.split()[1]
-    if verbose:
-        print(f'game_id = "{game_id}"')
-
-    # Separar las jugadas
-    hands = hands.split(";")
-    if verbose:
-        print(f'hands = "{hands}"')
-
-
-    for hand in hands:
-        # Separar la jugada en sus componentes
-        colors = hand.split(",")
-        if verbose:
-            print(f'colors = "{colors}"')
-        
-        # Procesar cada color
-        for color in colors:
-            # Eliminar los espacios en blanco al principio y al final
-            color = color.strip()
-            if verbose:
-                print(f'color = "{color}"')
-            # Separar el color y el numero
-            number, col = color.split(" ")
-            if verbose:
-                print(f'number = "{number}"')
-                print(f'col = "{col}"')
-
-            # Verificar si la jugada es válida
-            if int(number) > BAG[col]:
-                valid = False
+        print(f'Looking for symbol in ({start_row}, {start_col}) and ({end_row}, {end_col})')
+    for i in range(start_row, end_row):
+        for j in range(start_col, end_col):
+            if engine[i][j] in symbols:
                 if verbose:
-                    print(f'Jugada invalida: {col}:{number} - {BAG[col]}')
-                break
+                    print(f'Found symbol {engine[i][j]} at {i},{j}')
+                return True
+    return False
 
-        if not valid:
-            break
-    if verbose:
-        print(f'line = "{line}"')
-        print(f'valid = "{valid}"')
-        print(f'game_id = "{game_id}"')
-    return (valid, game_id)
+    
+def procesar_motor(engine, symbols, verbose: bool = False):
+    """Procesar el motor."""
+    # Recorrer el motor 
+    #  - Cuando se encuentre un numero hay que buscar los siguientes digitos y formar un numero completo
+    #    - Estos numeros no tienen que volver a ser analizados
+    #  - Una vez se tenga el número completo hay que buscar si hay algun simbolo adyacente (incluido en diagonal)
+    #  - Si el numero tiene un simbolo adyacente se suma al resultado
 
+    result = 0
+    dentro=False
+    inicio=0
+    fin=0
+    for i, row in enumerate(engine):
+        for j, char in enumerate(row):
+            if char.isdigit():
+                if not dentro:
+                    inicio=j
+                    dentro=True
+                    number = char
+                else:
+                    number += char
+            else:
+                if dentro:
+                    fin=j
+                    dentro=False
+                    # Buscar simbolos adyacentes
+                    if verbose:
+                        print(f'Number {number} at {i}: {inicio},{fin}')
+                    if look_for_symbol(engine, symbols, i, inicio, fin, verbose):
+                        result += int(number)
+                        if verbose:
+                            print(f'Number {number} at {i}: {inicio},{fin} with symbol')
+        if dentro:
+            fin=len(row)
+            dentro=False
+            # Buscar simbolos adyacentes
+            if verbose:
+                print(f'Number {number} at {i}: {inicio},{fin}')
+            if look_for_symbol(engine, symbols, i, inicio, fin, verbose):
+                result += int(number)
+                if verbose:
+                    print(f'Number {number} at {i}: {inicio},{fin} with symbol')
+        inicio=0
+        fin=0
+    return result
 
-def dia2_1(data, valido, verbose: bool = False):
+def dia3_1(data, verbose: bool = False):
     """ Función principal del día 2-1. """
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -67,94 +85,19 @@ def dia2_1(data, valido, verbose: bool = False):
     if verbose:
         print(f'Opening file {data_path}')
 
-    # Leer el archivo
-    with open(data_path, "r", encoding="utf-8") as file:
-        # Leer cada linea del archivo
-        result = 0
-        for line in file:
-            # Decodificar la linea
-            salida = process_game(line, verbose=verbose)
-            if verbose:
-                print(f'salida = "{salida}"')
-            if valido and salida[0]:
-                result += int(salida[1])
-            if not valido and not salida[0]:
-                result += int(salida[1])
-        # Imprimir el resultado
-        print(f'resultado dia 2 - 1 = "{result}"')
+    # Inicializar un np.aary con las lineas del fichero de datos
+    engine = file_to_nparray(data_path)
 
-def power(line: str, verbose: bool = False) -> int:
-    """ Procesa una linea del juego. """
-    
-    # Separar la linea en sus componentes. Primero el juego de las jugadas
-    game, hands = line.split(":")
+    # Obtener la lista de simbolos únicos del motor
+    symbols = extract_chars(engine)
     if verbose:
-        print(f'game = "{game}"')
-        print(f'hands = "{hands}"')
+        print(f'Engine symbols: {symbols}')
 
-    # Obtener el ID del juego
-    red = 0
-    green = 0
-    blue = 0
+    result=procesar_motor(engine, symbols, verbose)
 
-    # Separar las jugadas
-    hands = hands.split(";")
-    if verbose:
-        print(f'hands = "{hands}"')
-
-    for hand in hands:
-        # Separar la jugada en sus componentes
-        colors = hand.split(",")
-        if verbose:
-            print(f'colors = "{colors}"')
-
-        # Procesar cada color
-        for color in colors:
-            # Eliminar los espacios en blanco al principio y al final
-            color = color.strip()
-            if verbose:
-                print(f'color = "{color}"')
-            # Separar el color y el numero
-            number, col = color.split(" ")
-            if verbose:
-                print(f'number = "{number}"')
-                print(f'col = "{col}"')
-
-            if col == "red" and int(number) > red:
-                red = int(number)
-            elif col == "green" and int(number) > green:
-                green = int(number)
-            elif col == "blue" and int(number) > blue:
-                blue = int(number)
-
-    if verbose:
-        print(f'line = "{line}"')
-        print(f'red = "{red}"')
-        print(f'green = "{green}"')
-        print(f'blue = "{blue}"')
-        print(f'result = "{red * green * blue}"')
-    return red * green * blue
-
-
-def dia2_2(data, verbose: bool = False):
-    """ Función principal del día 2-2. """
-
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    data_path = os.path.join(current_dir, data)
-    if verbose:
-        print(f'Opening file {data_path}')
-
-    # Leer el archivo
-    with open(data_path, "r", encoding="utf-8") as file:
-        # Leer cada linea del archivo
-        result = 0
-        for line in file:
-            # Decodificar la linea
-            result += power(line, verbose=verbose)
-        # Imprimir el resultado
-        print(f'resultado dia 2 - 2 = "{result}"')
+    print(f'resultado dia 3 - 1 = "{result}"')
 
 
 if __name__ == "__main__":
-    dia2_1("test2_1.txt", True, verbose=True)
-    dia2_2("test2_2.txt", verbose=True)
+    dia3_1("test3_1.txt", verbose=True)
+    #dia3_2("test3_2.txt", verbose=True)
