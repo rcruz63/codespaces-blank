@@ -13,6 +13,7 @@ El esquema del motor (tu entrada del puzle) consiste en una representación visu
 
 Aquí tienes un ejemplo del esquema del motor:
 
+```
 467..114..
 ...*......
 ..35..633.
@@ -23,6 +24,8 @@ Aquí tienes un ejemplo del esquema del motor:
 ......755.
 ...$.*....
 .664.598..
+```
+
 En este esquema, dos números no son números de parte porque no están adyacentes a un símbolo: 114 (arriba a la derecha) y 58 (en el centro a la derecha). Todos los demás números están adyacentes a un símbolo y, por lo tanto, son números de parte; su suma es 4361.
 
 Por supuesto, el esquema del motor real es mucho más grande. ¿Cuál es la suma de todos los números de las partes en el esquema del motor?

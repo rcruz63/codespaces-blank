@@ -11,11 +11,14 @@ Juegas varias partidas y registras la información de cada juego (tu entrada de 
 
 Por ejemplo, el registro de algunos juegos podría verse así:
 
+```
 Juego 1: 3 azules, 4 rojos; 1 rojo, 2 verdes, 6 azules; 2 verdes
 Juego 2: 1 azul, 2 verdes; 3 verdes, 4 azules, 1 rojo; 1 verde, 1 azul
 Juego 3: 8 verdes, 6 azules, 20 rojos; 5 azules, 4 rojos, 13 verdes; 5 verdes, 1 rojo
 Juego 4: 1 verde, 3 rojos, 6 azules; 3 verdes, 6 rojos; 3 verdes, 15 azules, 14 rojos
 Juego 5: 6 rojos, 1 azul, 3 verdes; 2 azules, 1 rojo, 2 verdes
+```
+
 En el juego 1, se revelan tres conjuntos de cubos de la bolsa (y luego se vuelven a poner). El primer conjunto es de 3 cubos azules y 4 cubos rojos; el segundo conjunto es de 1 cubo rojo, 2 cubos verdes y 6 cubos azules; el tercer conjunto es solo de 2 cubos verdes.
 
 El elfo quiere saber primero qué juegos habrían sido posibles si la bolsa solo contuviera 12 cubos rojos, 13 cubos verdes y 14 cubos azules.
