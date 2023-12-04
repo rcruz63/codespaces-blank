@@ -1,5 +1,6 @@
 """This is the main application file for the adv2023 package. """
 from adv2023.dia1.dia1 import dia1_1, dia1_2
+from adv2023.dia2.dia2 import dia2_1, dia2_2
 
 
 def run():
@@ -9,6 +10,7 @@ def run():
         # Print the menu
         print("Welcome to the menu")
         print("1. Dia 1")
+        print("2. Dia 2")
         print("Q. Exit")
 
         # Ask the user for a choice
@@ -17,6 +19,9 @@ def run():
         if choice == "1":
             dia1_1("data1_1.txt")
             dia1_2("data1_2.txt")
+        elif choice == "2":
+            dia2_1("data2_1.txt", False)
+            dia2_2("data2_2.txt", False)
         # If the user chooses Q, exit the loop
         elif choice.upper() == "Q":
             break
