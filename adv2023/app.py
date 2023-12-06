@@ -1,7 +1,7 @@
 """This is the main application file for the adv2023 package. """
 from adv2023.dia1.dia1 import dia1_1, dia1_2
 from adv2023.dia2.dia2 import dia2_1, dia2_2
-from adv2023.dia3.dia3 import dia3_1
+from adv2023.dia3.dia3 import dia3_1, dia3_2
 
 
 def run():
@@ -25,8 +25,8 @@ def run():
             dia2_1("data2_1.txt", False)
             dia2_2("data2_2.txt", False)
         elif choice == "3":
-            dia3_1("data3_1.txt", True)
-            #dia3_2("data3_2.txt", False)
+            dia3_1("data3_1.txt", False)
+            dia3_2("data3_2.txt", False)
         # If the user chooses Q, exit the loop
         elif choice.upper() == "Q":
             break

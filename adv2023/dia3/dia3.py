@@ -30,10 +30,10 @@ def look_for_symbol(engine, symbols, row, inicio, fin, verbose: bool = False):
                 return True
     return False
 
-    
+
 def procesar_motor(engine, symbols, verbose: bool = False):
     """Procesar el motor."""
-    # Recorrer el motor 
+    # Recorrer el motor
     #  - Cuando se encuentre un numero hay que buscar los siguientes digitos y formar un numero completo
     #    - Estos numeros no tienen que volver a ser analizados
     #  - Una vez se tenga el número completo hay que buscar si hay algun simbolo adyacente (incluido en diagonal)
@@ -78,7 +78,7 @@ def procesar_motor(engine, symbols, verbose: bool = False):
     return result
 
 def dia3_1(data, verbose: bool = False):
-    """ Función principal del día 2-1. """
+    """ Función principal del día 3-1. """
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
     data_path = os.path.join(current_dir, data)
@@ -98,6 +98,112 @@ def dia3_1(data, verbose: bool = False):
     print(f'resultado dia 3 - 1 = "{result}"')
 
 
+def producto_valores_adyacentes(valores, i, j, verbose: bool = False):
+    """ Calcular el producto de los valores adyacentes a un simbolo """
+    valores_adyacentes = []
+    for fila, inicio, fin, valor in valores:
+        if (fila == i-1 and inicio-1 <= j <= fin):
+            if verbose:
+                print(f'Fila superior: {fila}, {inicio}, {fin}, {valor} - Sym: {i},{j}')
+            valores_adyacentes.append(valor)
+        if (fila == i and j in (inicio-1, fin)):
+            if verbose:
+                print(f'Fila misma: {fila}, {inicio}, {fin}, {valor} - Sym: {i},{j}')
+            valores_adyacentes.append(valor)
+        if (fila == i+1 and inicio-1 <= j <= fin):
+            if verbose:
+                print(f'Fila inferior: {fila}, {inicio}, {fin}, {valor} - Sym: {i},{j}')
+            valores_adyacentes.append(valor)
+
+    if len(valores_adyacentes) < 2:
+        return -1
+
+    if verbose:
+        print(f'Valores adyacentes: {valores_adyacentes}')
+
+    producto = 1
+    for valor in valores_adyacentes:
+        producto *= valor
+
+    return producto
+
+def procesar_numeros(engine, verbose: bool = False):
+    """ Generar diccionario por fila ordenada de numeros con sus posiciones """
+    lista_numeros=[]
+    dentro=False
+    inicio=0
+    fin=0
+    for i, row in enumerate(engine):
+        for j, char in enumerate(row):
+            if char.isdigit():
+                if not dentro:
+                    inicio=j
+                    dentro=True
+                    number = char
+                else:
+                    number += char
+            else:
+                if dentro:
+                    fin=j
+                    dentro=False
+                    if verbose:
+                        print(f'Number {number} at {i}: {inicio},{fin}')
+                    lista_numeros.append([i, inicio, fin, int(number)])
+        if dentro:
+            fin=len(row)
+            dentro=False
+            # Buscar simbolos adyacentes
+            if verbose:
+                print(f'Number {number} at {i}: {inicio},{fin}')
+            lista_numeros.append([i, inicio, fin, int(number)])
+        inicio=0
+        fin=0
+    return lista_numeros
+
+def procesar_simblos(engine, lista_numeros, symbols, verbose):
+    """ Para cada simbolo buscar si tiene DOS numeros adyacentes. si los tiene los multiplica 
+        y los suma al resultado """
+    result=0
+    for i, row in enumerate(engine):
+        for j, char in enumerate(row):
+            if char in symbols:
+                if verbose:
+                    print(f'Found symbol {char} at {i},{j}')
+                # Buscar simbolos adyacentes
+                producto = producto_valores_adyacentes(lista_numeros, i, j, verbose)
+                if verbose:
+                    print(f'Producto: {producto}')
+                if producto > 0:
+                    result += producto
+
+    if verbose:
+        print(f'Resultado: {result}')
+    return result
+
+
+def dia3_2(data, verbose: bool = False):
+    """ Función principal del día 3-2. """
+
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    data_path = os.path.join(current_dir, data)
+    if verbose:
+        print(f'Opening file {data_path}')
+
+    # Inicializar un np.aary con las lineas del fichero de datos
+    engine = file_to_nparray(data_path)
+
+    # Obtener la lista de simbolos únicos del motor
+    symbols = extract_chars(engine)
+    if verbose:
+        print(f'Engine symbols: {symbols}')
+
+    lista_numeros=procesar_numeros(engine, verbose)
+
+    result = procesar_simblos(engine, lista_numeros, symbols, verbose)
+
+    print(f'resultado dia 3 - 2 = "{result}"')
+
+
 if __name__ == "__main__":
     dia3_1("test3_1.txt", verbose=True)
-    #dia3_2("test3_2.txt", verbose=True)
+    dia3_2("test3_2.txt", verbose=True)
