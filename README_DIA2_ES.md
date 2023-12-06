@@ -11,11 +11,14 @@ Juegas varias partidas y registras la información de cada juego (tu entrada de 
 
 Por ejemplo, el registro de algunos juegos podría verse así:
 
+```
 Juego 1: 3 azules, 4 rojos; 1 rojo, 2 verdes, 6 azules; 2 verdes
 Juego 2: 1 azul, 2 verdes; 3 verdes, 4 azules, 1 rojo; 1 verde, 1 azul
 Juego 3: 8 verdes, 6 azules, 20 rojos; 5 azules, 4 rojos, 13 verdes; 5 verdes, 1 rojo
 Juego 4: 1 verde, 3 rojos, 6 azules; 3 verdes, 6 rojos; 3 verdes, 15 azules, 14 rojos
 Juego 5: 6 rojos, 1 azul, 3 verdes; 2 azules, 1 rojo, 2 verdes
+```
+
 En el juego 1, se revelan tres conjuntos de cubos de la bolsa (y luego se vuelven a poner). El primer conjunto es de 3 cubos azules y 4 cubos rojos; el segundo conjunto es de 1 cubo rojo, 2 cubos verdes y 6 cubos azules; el tercer conjunto es solo de 2 cubos verdes.
 
 El elfo quiere saber primero qué juegos habrían sido posibles si la bolsa solo contuviera 12 cubos rojos, 13 cubos verdes y 14 cubos azules.
@@ -24,9 +27,7 @@ En el ejemplo anterior, los juegos 1, 2 y 5 habrían sido posibles si la bolsa h
 
 Determina qué juegos habrían sido posibles si la bolsa hubiera sido cargada solo con 12 cubos rojos, 13 cubos verdes y 14 cubos azules. ¿Cuál es la suma de los ID de esos juegos?
 
-## ¡Claro, puedo ayudarte! Aquí está la traducción al español:
-
---- Parte Dos ---
+## Parte Dos ---
 ¡El elfo dice que han dejado de producir nieve porque no están recibiendo agua! No está seguro de por qué se detuvo el agua; sin embargo, puede mostrarte cómo llegar a la fuente de agua para que lo compruebes por ti mismo. ¡Está justo ahí adelante!
 
 Mientras continúas tu caminata, el elfo plantea una segunda pregunta: en cada juego que jugaste, ¿cuál es la menor cantidad de cubos de cada color que podría haber estado en la bolsa para hacer posible el juego?
