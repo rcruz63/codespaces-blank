@@ -94,3 +94,5 @@ Semilla 13, suelo 13, fertilizante 52, agua 41, luz 34, temperatura 34, humedad 
 Entonces, el número de ubicación más bajo en este ejemplo es 35.
 
 ¿Cuál es el número de ubicación más bajo que corresponde a cualquiera de los números de semilla iniciales?
+
+## 
